@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oplex Management System</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="assets/oplex-logo.png" alt="Oplex Logo">
+    </div>
+    <h3>System Zarządzania</h3>
+    <input id="loginName" placeholder="Imię / Nick" autocomplete="off">
+    <button onclick="login()">Zaloguj się</button>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <img src="assets/oplex-logo.png" alt="Oplex" class="logo-small">
+  </div>
+  <div class="topbar-right">
+    <span class="user-info">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <strong id="userName"></strong>
+    </span>
+    
+    <!-- Admin Badge (gdy zalogowany jako admin) -->
+    <span id="adminBadge" class="admin-badge" style="display: none;">
+      🔐 Admin • 60:00
+    </span>
+    
+    <!-- Przycisk Tryb Admin (gdy NIE admin) -->
+    <button id="adminLoginBtn" class="admin-btn" onclick="promptAdminLogin()" style="display: none;">
+      🔓 Tryb Admin
+    </button>
+    
+    <!-- Profil pracownika -->
+    <a href="profil/index.html" class="profile-btn">
+      👤 Profil
+    </a>
+    
+    <button class="logout-btn" onclick="logout()">Wyloguj</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+  
+  <!-- HERO SECTION -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1>
+        <img src="assets/oplex-logo.png" alt="Oplex" class="hero-logo">
+        <span class="hero-title">Management System</span>
+      </h1>
+      <p class="hero-subtitle">Kompleksowe zarządzanie sklepem - wersja 3.0</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-value">7</span>
+        <span class="stat-label">Modułów</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">100%</span>
+        <span class="stat-label">Dostępność</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODUŁY OPERACYJNE -->
+  <div class="section-header">
+    <h2>Moduły Operacyjne</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="tiles-main">
+    
+    <a href="obrot/index.html" class="tile tile-primary">
+      <div class="tile-icon">💰</div>
+      <div class="tile-content">
+        <h3>Obrót</h3>
+        <p>Dzienne i tygodniowe rozliczenia</p>
+        <span class="badge badge-success">GOTOWY v3.0.7</span>
+      </div>
+      <div class="tile-arrow">→</div>
+    </a>
+
+    <a href="zwroty/index.html" class="tile tile-primary">
+      <div class="tile-icon">📦</div>
+      <div class="tile-content">
+        <h3>Zwroty</h3>
+        <p>Rejestr zwrotów i statystyki</p>
+        <span class="badge badge-info">AKTYWNY</span>
+      </div>
+      <div class="tile-arrow">→</div>
+    </a>
+
+    <a href="reklamacje/index.html" class="tile tile-primary">
+      <div class="tile-icon">📝</div>
+      <div class="tile-content">
+        <h3>Reklamacje</h3>
+        <p>Obsługa reklamacji klientów</p>
+        <span class="badge badge-info">AKTYWNY</span>
+      </div>
+      <div class="tile-arrow">→</div>
+    </a>
+
+  </div>
+
+  <!-- MODUŁY ZARZĄDZANIA -->
+  <div class="section-header">
+    <h2>Zarządzanie</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="tiles-admin">
+    
+    <a href="urlopy/index.html" class="tile tile-secondary">
+      <div class="tile-icon-small">🏖️</div>
+      <div class="tile-content">
+        <h3>Urlopy</h3>
+        <p>Kalendarz i limity dni</p>
+        <span class="badge badge-info">DOSTĘPNY</span>
+      </div>
+    </a>
+
+    <a href="kalkulacje/index.html" class="tile tile-secondary">
+      <div class="tile-icon-small">📐</div>
+      <div class="tile-content">
+        <h3>Kalkulacje</h3>
+        <p>Rentowność i wskaźniki</p>
+        <span class="badge badge-info">DOSTĘPNY</span>
+      </div>
+    </a>
+
+    <a href="javascript:void(0)" onclick="handleSuperAdminClick()" class="tile tile-secondary tile-admin" data-admin-only="true">
+      <div class="tile-icon-small">🔐</div>
+      <div class="tile-content">
+        <h3>Zarządzanie</h3>
+        <p>Panel administratora</p>
+        <span class="badge badge-danger">ADMIN</span>
+      </div>
+      <div class="admin-lock">🔑 Kliknij aby się zalogować</div>
+    </a>
+
+  </div>
+
+  <!-- FOOTER INFO -->
+  <div class="footer-info">
+    <p>Oplex Management System v3.0 | Zalogowany jako: <strong id="userNameFooter"></strong></p>
+  </div>
+
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/employees.js"></script>
+<script src="js/admin-auth.js"></script>
+<script>
+  requireAuth();
+  
+  // Update footer username
+  const footerUser = document.getElementById('userNameFooter');
+  if (footerUser && getUser()) {
+    footerUser.innerText = getUser();
+  }
+  
+  // Initialize Admin UI
+  function initAdminUI() {
+    const isAdmin = checkAdminSession();
+    const adminBadge = document.getElementById('adminBadge');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminTiles = document.querySelectorAll('[data-admin-only="true"]');
+    
+    // Sprawdź czy użytkownik ma uprawnienia do trybu Admin
+    const username = getUser();
+    const canAccessAdmin = username && typeof canAccessAdminMode === 'function' && canAccessAdminMode(username);
+    
+    if (isAdmin) {
+      // Pokaż badge admina
+      if (adminBadge) adminBadge.style.display = 'inline-flex';
+      if (adminLoginBtn) adminLoginBtn.style.display = 'none';
+      
+      // Odblokuj kafelki admin (poza Super-Admin który ma własny handler)
+      adminTiles.forEach(tile => {
+        // Sprawdź czy to NIE jest kafelek Super-Admin (który ma onclick)
+        const href = tile.getAttribute('href');
+        if (href && href !== 'javascript:void(0)') {
+          tile.classList.remove('tile-locked');
+          tile.style.pointerEvents = 'auto';
+          tile.style.opacity = '1';
+          const lock = tile.querySelector('.admin-lock');
+          if (lock) lock.style.display = 'none';
+        }
+      });
+      
+      // Uruchom timer
+      startAdminTimer();
+      updateAdminTimerUI();
+    } else {
+      // Pokaż przycisk logowania TYLKO jeśli użytkownik ma uprawnienia
+      if (adminBadge) adminBadge.style.display = 'none';
+      if (adminLoginBtn) {
+        if (canAccessAdmin) {
+          adminLoginBtn.style.display = 'inline-flex';
+        } else {
+          adminLoginBtn.style.display = 'none'; // Ukryj dla zwykłych pracowników
+        }
+      }
+      
+      // Zablokuj kafelki admin (poza Super-Admin)
+      adminTiles.forEach(tile => {
+        const href = tile.getAttribute('href');
+        
+        // Kafelek Super-Admin (onclick) - zmieniamy tylko wygląd, ale zostawiamy klikalne
+        if (href === 'javascript:void(0)') {
+          tile.classList.add('tile-locked');
+          tile.style.opacity = '0.8';
+          const lock = tile.querySelector('.admin-lock');
+          if (lock) {
+            lock.textContent = '🔑 Kliknij aby się zalogować';
+            lock.style.display = 'block';
+          }
+        } else {
+          // Pozostałe kafelki - całkowite zablokowanie
+          tile.classList.add('tile-locked');
+          tile.style.pointerEvents = 'none';
+          tile.style.opacity = '0.5';
+          tile.style.cursor = 'not-allowed';
+          const lock = tile.querySelector('.admin-lock');
+          if (lock) {
+            lock.textContent = '🔒 Wymaga uprawnień admin';
+            lock.style.display = 'block';
+          }
+        }
+      });
+    }
+  }
+  
+  // Inicjalizuj UI po załadowaniu
+  initAdminUI();
+  
+  // Handler kliknięcia kafelka Super-Admin
+  window.handleSuperAdminClick = function() {
+    // Sprawdź czy admin session aktywny
+    if (checkAdminSession()) {
+      window.location.href = 'admin/index.html';
+      return;
+    }
+    
+    // Sprawdź czy użytkownik jest zarządcą
+    const username = getUser();
+    if (!username) {
+      alert("❌ Musisz się najpierw zalogować!");
+      return;
+    }
+    
+    if (typeof getEmployeeByUsername === 'function') {
+      const employee = getEmployeeByUsername(username);
+      
+      if (!employee) {
+        alert("❌ Brak uprawnień!\n\nDostęp do Super-Admin wymaga profilu pracownika z rangą Zarządca.");
+        return;
+      }
+      
+      if (employee.role === 'manager' || employee.role === 'super-admin') {
+        // Zarządca lub super-admin - prompt logowania
+        promptManagerLogin();
+      } else {
+        alert("❌ Brak uprawnień!\n\nDostęp do Super-Admin wymaga rangi Zarządca.\n\nSkontaktuj się z administratorem.");
+      }
+    } else {
+      alert("❌ System pracowników niedostępny!");
+    }
+  };
+</script>
+
+</body>
+</html>
